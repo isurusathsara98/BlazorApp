@@ -1,6 +1,24 @@
 ﻿@page "/inventory"
+@inject IJSRuntime JS
+
 <h3>Inventory</h3>
+@foreach (var note in notes)
+{
+    <p>
+        @note.description
+    </p>
+}
 
 @code {
+    public class Notes
+    {
+        public string? Id { get; set; }
+        public string? description { get; set; }
+    }
 
+    private IEnumerable<Notes> notes = Array.Empty<Notes>();
+    protected override async Task OnInitializedAsync()
+    {
+        notes = await JS.InvokeAsync<List<Notes>>("getNotes");
+    }
 }

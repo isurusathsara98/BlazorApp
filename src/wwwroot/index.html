@@ -28,5 +28,47 @@
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
 </body>
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+    import {
+        getFirestore,
+        collection,
+        addDoc,
+        getDocs,
+        deleteDoc,
+        doc,
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+        apiKey: "AIzaSyBUEuspgq4Ka2c9abqbP7NVNOU0Dhh_FjI",
+        authDomain: "todo-blazor.firebaseapp.com",
+        projectId: "todo-blazor",
+        storageBucket: "todo-blazor.appspot.com",
+        messagingSenderId: "482147020387",
+        appId: "1:482147020387:web:9039bfc789a7981d6d5256",
+        measurementId: "G-XCL4RK7TE3"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+
+    // Initialize Cloud Firestore and get a reference to the service
+    const db = getFirestore(app);
+
+    // Define a function to add a new user to the Firestore database
+    window.getNotes = async () => {
+        const querySnapshot = await getDocs(collection(db, "notes"));
+        let dataArray = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            description: doc.get("description"),
+        }));
+
+        return dataArray;
+    };
+</script>
 </html>
