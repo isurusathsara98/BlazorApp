@@ -70,5 +70,20 @@
 
         return dataArray;
     };
+
+    window.getInventory = async () => {
+        const querySnapshot = await getDocs(collection(db, "inventory"));
+        let dataArray = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            brand: doc.get("brand"),
+            discount: doc.get("discount"),
+            quantity: doc.get("quantity"),
+            price: doc.get("price"),
+            productName: doc.get("product"),
+            type: doc.get("type"),
+        }));
+
+        return dataArray;
+    };
 </script>
 </html>
