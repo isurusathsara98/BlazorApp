@@ -1,4 +1,5 @@
 ﻿using BeautyWeb.Model;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
 namespace BeautyWeb.Pages
@@ -8,7 +9,9 @@ namespace BeautyWeb.Pages
         private List<InventoryItem> items = new List<InventoryItem>();
         private string modalStyle = "display:none;";
         private bool IsAddProduct = true;
+        private string searchItem = null;
         private InventoryItem newProduct = new InventoryItem();
+        private List<InventoryItem> filteredItems = new List<InventoryItem>();
         protected override async Task OnInitializedAsync()
         {
             items = await JS.InvokeAsync<List<InventoryItem>>("getInventory");
@@ -131,6 +134,21 @@ namespace BeautyWeb.Pages
                     ToastService.ShowError(error);
                 }
             }
+        }
+        private void HandleSearchInput(ChangeEventArgs args)
+        {
+            searchItem = args.Value.ToString();
+            UpdateFilteredItems();
+        }
+        private void UpdateFilteredItems()
+        {
+            filteredItems = items
+                .Where(product => string.IsNullOrEmpty(searchItem) ||
+                                   product.productName.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||
+                                   product.Brand.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||
+                                   product.Type.Contains(searchItem, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+            StateHasChanged();
         }
     }
 }
