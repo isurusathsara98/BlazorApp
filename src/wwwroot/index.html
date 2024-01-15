@@ -27,6 +27,7 @@
         <a class="dismiss">🗙</a>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
+    <link href="_content/Blazored.Toast/blazored-toast.min.css" rel="stylesheet"/>
 </body>
 <script type="module">
     // Import the functions you need from the SDKs you need
@@ -38,6 +39,7 @@
         addDoc,
         getDocs,
         deleteDoc,
+        updateDoc,
         doc,
     } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -60,17 +62,6 @@
     // Initialize Cloud Firestore and get a reference to the service
     const db = getFirestore(app);
 
-    // Define a function to add a new user to the Firestore database
-    window.getNotes = async () => {
-        const querySnapshot = await getDocs(collection(db, "notes"));
-        let dataArray = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            description: doc.get("description"),
-        }));
-
-        return dataArray;
-    };
-
     window.getInventory = async () => {
         const querySnapshot = await getDocs(collection(db, "inventory"));
         let dataArray = querySnapshot.docs.map((doc) => ({
@@ -84,6 +75,47 @@
         }));
 
         return dataArray;
+    };
+
+    window.addInventory = async (product) => {
+        try {
+            const docRef = await addDoc(collection(db, "inventory"), {
+                brand: product.brand,
+                discount: product.discount,
+                quantity: product.quantity,
+                price: product.price,
+                product: product.productName,
+                type: product.type,
+            });
+        } catch (e) {
+            console.error("Error adding document: ", e);
+        }
+    };
+
+    window.deleteInventory = async (productId) => {
+        try {
+            await deleteDoc(doc(db, "inventory", productId));
+            console.log("Document with ID", productId, "deleted successfully.");
+        } catch (e) {
+            console.error("Error deleting document: ", e);
+        }
+    };
+
+    window.editInventory = async (product) => {
+        try {
+            const docRef = doc(db, "inventory", product.id);
+            await updateDoc(docRef, {
+                brand: product.brand,
+                discount: product.discount,
+                quantity: product.quantity,
+                price: product.price,
+                product: product.productName,
+                type: product.type,
+            });
+            console.log("Document with ID", product.id, "updated successfully.");
+        } catch (e) {
+            console.error("Error updating document: ", e);
+        }
     };
 </script>
 </html>

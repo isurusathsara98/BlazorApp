@@ -1,6 +1,6 @@
 ﻿@page "/inventory"
 @inject IJSRuntime JS
-@using Microsoft.AspNetCore.Components.QuickGrid
+@inject IToastService ToastService
 
 <h2>Womans Beauty Boutique Inventory</h2>
 <button class="btn btn-success" @onclick="AddProduct">Add Product</button>
@@ -39,7 +39,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Product</h5>
+                <h5 class="modal-title">@(IsAddProduct?"Add Product": "Edit Product")</h5>
                 <button type="button" class="btn-close" @onclick="CloseAddProductModal"></button>
             </div>
             <div class="modal-body">
@@ -70,10 +70,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" @onclick="AddProductToDb">Add</button>
+                <button type="button" class="btn btn-primary" @onclick="@(IsAddProduct?AddProductToDb:UpdateInventoryItem)">@(IsAddProduct ? "Add" : "Edit")</button>
                 <button type="button" class="btn btn-secondary" @onclick="CloseAddProductModal">Close</button>
             </div>
         </div>
     </div>
 </div>
-
