@@ -62,13 +62,13 @@
                 <div class="total-text">Total Amount</div>
                 <label for="html">@TotalAmount</label>
             </div>
-            <button class="checkout-btn" @* @onclick="PreCheckOut" *@>Checkout</button>
+            <button class="checkout-btn" @onclick="PreCheckOut">Checkout</button>
         </div>
     </div>
 </div>
 
 <!-- Modal for adding new product -->
-@* @if (IsmodalOpen)
+@if (IsmodalOpen)
 {
     <div>
         <div class="modal-overlay">
@@ -123,4 +123,4 @@
             </div>
         </div>
     </div>
-} *@
+}
