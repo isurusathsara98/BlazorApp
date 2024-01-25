@@ -9,11 +9,16 @@ namespace BeautyWeb.Pages
 
         private List<InventoryItem> items = new List<InventoryItem>();
         private List<InventoryItem> checkList = new List<InventoryItem>();
+
         private List<InventoryItem> productlist = new List<InventoryItem>();
         private InventoryItem CurrentProduct = new InventoryItem();
         private string searchItem = null;
         private List<InventoryItem> filteredItems = new List<InventoryItem>();
         private int quantity = 1;
+
+        private bool Isadding = false; 
+        private bool IsmodalOpen = false;
+        private bool Ischeckoutavailable = false;
 
         private int? TotalAmount = 0;
         private int? PaidAmount = 0;
@@ -34,6 +39,114 @@ namespace BeautyWeb.Pages
             TotalAmount += CurrentProduct.TotalPrice;
             checkList.Add(CurrentProduct);
             filteredItems.Clear();
+        }
+
+        private async Task CheckOut()
+        {
+            foreach (var list in checkList)
+            {
+                //InsertTransaction(transaction);
+                UpdateProduct(list);
+
+            }
+
+            ToastService.ShowSuccess("Product updated in inventory successfully!");
+            searchItem = null;
+            filteredItems.Clear();
+            productlist.Clear();
+            checkList.Clear();
+            IsmodalOpen = false;
+        }
+
+        private async Task CalculateReturn()
+        {
+            ReturnedAmount = PaidAmount - TotalAmount + Discount;
+            Ischeckoutavailable = true;
+        }
+
+        private async Task PreCheckOut()
+        {
+            IsmodalOpen = true;
+        }
+
+        private async Task CancelCheckout()
+        {
+            IsmodalOpen = false;
+            Ischeckoutavailable = false;
+            PaidAmount = 0;
+            Discount = 0;
+            ReturnedAmount = 0;
+
+        }
+
+        private async Task CloseAddProductModal()
+        {
+            IsmodalOpen = false;
+        }
+
+        private void UpdateProduct(InventoryItem item)
+        {
+            var newProduct = new InventoryItem
+            {
+                Id = item.Id,
+                productName = item.productName,
+                Brand = item.Brand,
+                Quantity = item.Quantity - item.BuyingQuantity,
+                netPrice = item.netPrice,
+                sellingPrice = item.sellingPrice
+            };
+
+            UpdateInventoryItem(newProduct);
+        }
+
+        private async void UpdateInventoryItem(InventoryItem item)
+        {
+            var validationErrors = ValidateProduct(item);
+            if (item.Quantity == null)
+            {
+                item.Quantity = 0;
+            }
+
+            if (item.netPrice == null)
+            {
+                item.netPrice = 0;
+            }
+
+            if (item.sellingPrice == null)
+            {
+                item.sellingPrice = 0;
+            }
+            if (validationErrors.Count == 0)
+            {
+                await JS.InvokeVoidAsync("editInventory", item);
+                items = await JS.InvokeAsync<List<InventoryItem>>("getInventory");
+                CloseAddProductModal();
+                StateHasChanged();
+            }
+            else
+            {
+                foreach (var error in validationErrors)
+                {
+                    ToastService.ShowError(error);
+                }
+            }
+        }
+
+        List<string> ValidateProduct(InventoryItem product)
+        {
+            List<string> validationErrors = new List<string>();
+
+            if (string.IsNullOrWhiteSpace(product.productName))
+            {
+                validationErrors.Add("Product Name is required.");
+            }
+
+            if (string.IsNullOrWhiteSpace(product.Brand))
+            {
+                validationErrors.Add("Brand is required.");
+            }
+
+            return validationErrors;
         }
 
         private void HandleSearchInput(ChangeEventArgs args)
