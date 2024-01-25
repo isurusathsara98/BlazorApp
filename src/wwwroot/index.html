@@ -49,7 +49,7 @@
         apiKey: "AIzaSyBUEuspgq4Ka2c9abqbP7NVNOU0Dhh_FjI",
         authDomain: "todo-blazor.firebaseapp.com",
         projectId: "todo-blazor",
-        storageBucket: "todo-blazor.appspot.com",
+        storageBucket: "todo-blazor.appspot.com", 
         messagingSenderId: "482147020387",
         appId: "1:482147020387:web:9039bfc789a7981d6d5256",
         measurementId: "G-XCL4RK7TE3"
@@ -61,19 +61,6 @@
 
     // Initialize Cloud Firestore and get a reference to the service
     const db = getFirestore(app);
-
-    window.authenticateUser = async (username, password) => {
-        const querySnapshot = await getDocs(collection(db, "admin"));
-
-        const authenticated = querySnapshot.docs.some((doc) => {
-            const storedUsername = doc.get("username");
-            const storedPassword = doc.get("password");
-
-            return storedUsername === username && storedPassword === password;
-        });
-
-        return authenticated;
-    };
 
     window.getInventory = async () => {
         const querySnapshot = await getDocs(collection(db, "inventory"));

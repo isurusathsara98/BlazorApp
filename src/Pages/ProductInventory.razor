@@ -17,10 +17,7 @@
             <th>Quantity</th>
             <th>Net Price</th>
             <th>Selling Price</th>
-            <!--@if (adminService.IsAdmin)
-            {
-                <th>Action</th>
-            }-->
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -32,13 +29,10 @@
                 <td>@product.Quantity</td>
                 <td>@product.netPrice</td>
                 <td>@product.sellingPrice</td>
-                <!--@if (adminService.IsAdmin)
-                {
-                    <td>
-                        <button class="btn btn-primary" @onclick="() => EditProduct(product)">Edit</button>
-                        <button class="btn btn-danger" @onclick="() => DeleteProduct(product)">Delete</button>
-                    </td>
-                }-->
+                <td>
+                    <button class="btn btn-primary" @onclick="() => EditProduct(product)">Edit</button>
+                    <button class="btn btn-danger" @onclick="() => DeleteProduct(product)">Delete</button>
+                </td>
             </tr>
         }
     </tbody>
