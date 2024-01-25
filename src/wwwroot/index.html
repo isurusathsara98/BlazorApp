@@ -62,6 +62,19 @@
     // Initialize Cloud Firestore and get a reference to the service
     const db = getFirestore(app);
 
+    window.authenticateUser = async (username, password) => {
+        const querySnapshot = await getDocs(collection(db, "admin"));
+
+        const authenticated = querySnapshot.docs.some((doc) => {
+            const storedUsername = doc.get("username");
+            const storedPassword = doc.get("password");
+
+            return storedUsername === username && storedPassword === password;
+        });
+
+        return authenticated;
+    };
+
     window.getInventory = async () => {
         const querySnapshot = await getDocs(collection(db, "inventory"));
         let dataArray = querySnapshot.docs.map((doc) => ({
