@@ -15,7 +15,7 @@ namespace BeautyWeb.Pages
         private List<InventoryItem> filteredItems = new List<InventoryItem>();
         protected override async Task OnInitializedAsync()
         {
-            adminService.OnAuthenticationChanged += HandleAuthenticationChanged;
+            //adminService.OnAuthenticationChanged += HandleAuthenticationChanged;
             items = await JS.InvokeAsync<List<InventoryItem>>("getInventory");
         }
 
@@ -25,8 +25,7 @@ namespace BeautyWeb.Pages
         }
         public void Dispose()
         {
-            // Unsubscribe from the OnAuthenticationChanged event
-            adminService.OnAuthenticationChanged -= HandleAuthenticationChanged;
+            //adminService.OnAuthenticationChanged -= HandleAuthenticationChanged;
         }
         private void EditProduct(InventoryItem item)
         {

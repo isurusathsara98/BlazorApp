@@ -19,7 +19,7 @@ namespace BeautyWeb.Layout
                 StateHasChanged();
                 return;
             }
-            if (await adminService.AuthenticateAsync(username, password))
+            /*if (await adminService.AuthenticateAsync(username, password))
             {
                 username = string.Empty;
                 password = string.Empty;
@@ -34,7 +34,7 @@ namespace BeautyWeb.Layout
                 errorMessage = "Error occured in Authentication";
 
                 StateHasChanged();
-            }
+            }*/
         }
         private void ToggleLogin(bool display)
         {

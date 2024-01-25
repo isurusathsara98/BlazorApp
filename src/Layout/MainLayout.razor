@@ -1,6 +1,5 @@
 ﻿@inherits LayoutComponentBase
 @using Blazored.Toast.Configuration
-@inject Services.AdminService adminService
 
 <div class="page">
     <div class="sidebar">
@@ -9,7 +8,7 @@
 
     <main>
         <div class="top-row px-4">
-            @if (adminService.IsAdmin)
+            <!--@if (adminService.IsAdmin)
             {
                 <p>Welcome Admin! </p>
 
@@ -17,7 +16,7 @@
             else
             {
                 <button @onclick="() => ToggleLogin(true)" >Login as Admin</button>
-            }
+            } -->
             
         </div>
 
