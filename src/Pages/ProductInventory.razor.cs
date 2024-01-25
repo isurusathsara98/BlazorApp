@@ -1,6 +1,7 @@
 ﻿using BeautyWeb.Model;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using BeautyWeb.Services;
 
 namespace BeautyWeb.Pages
 {
@@ -15,6 +16,17 @@ namespace BeautyWeb.Pages
         protected override async Task OnInitializedAsync()
         {
             items = await JS.InvokeAsync<List<InventoryItem>>("getInventory");
+            adminService.OnAuthenticationChanged += HandleAuthenticationChanged;
+        }
+
+        private void HandleAuthenticationChanged()
+        {
+            StateHasChanged();
+        }
+        public void Dispose()
+        {
+            // Unsubscribe from the OnAuthenticationChanged event
+            adminService.OnAuthenticationChanged -= HandleAuthenticationChanged;
         }
 
         private void EditProduct(InventoryItem item)
