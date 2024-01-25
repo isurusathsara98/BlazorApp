@@ -114,5 +114,38 @@
             console.error("Error updating document: ", e);
         }
     };
+
+    //--------------Transactions functions--------------------
+    window.getTransaction = async () => {
+        const querySnapshot = await getDocs(collection(db, "transaction"));
+        let dataArray = querySnapshot.docs.map((doc) => {
+            const transactionItem = {
+                Id: doc.id,
+                Status: doc.Status,
+                Discount: doc.discount,
+                TotalAmount: doc.totalAmount,
+                productItems: []
+            };
+
+            const productItemsData = doc.get("productItems");
+            if (productItemsData && typeof productItemsData === 'object') {
+                transactionItem.productItems = Object.keys(productItemsData).map((key) => {
+                    const item = productItemsData[key];
+                    return {
+                        id: key,
+                        productName: item.productName,
+                        quantity: item.quantity,
+                        netprice: item.netPrice,
+                        sellingprice: item.sellingPrice,
+                        brand: item.brand
+                    };
+                });
+            }
+            return transactionItem;
+        });
+        return dataArray;
+    };
+
+
 </script>
 </html>

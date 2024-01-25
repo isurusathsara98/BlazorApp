@@ -4,19 +4,19 @@ using Microsoft.JSInterop;
 
 namespace BeautyWeb.Pages
 {
-    public partial class ProductInventory
+    public partial class Transactions
     {
         private List<InventoryItem> items = new List<InventoryItem>();
-        private List<TransactionItem> transactionItem = new List<TransactionItem>();
+        private List<TransactionItem> transactionItems = new List<TransactionItem>();
         private string modalStyle = "display:none;";
         private bool IsAddProduct = true;
         private string searchItem = null;
         private InventoryItem newProduct = new InventoryItem();
-        private List<InventoryItem> filteredItems = new List<InventoryItem>();
+        private List<TransactionItem> filteredItems = new List<TransactionItem>();
         protected override async Task OnInitializedAsync()
         {
             items = await JS.InvokeAsync<List<InventoryItem>>("getInventory");
-            transactionItem = await JS.InvokeAsync<List<TransactionItem>>("getTransaction");
+            transactionItems = await JS.InvokeAsync<List<TransactionItem>>("getTransaction");
         }
 
         private void EditProduct(InventoryItem item)
@@ -51,7 +51,7 @@ namespace BeautyWeb.Pages
             newProduct = new InventoryItem();
         }
         private async void AddProductToDb()
-         {
+        {
             var validationErrors = ValidateProduct(newProduct);
             if (newProduct.Quantity == null)
             {
@@ -139,10 +139,9 @@ namespace BeautyWeb.Pages
         }
         private void UpdateFilteredItems()
         {
-            filteredItems = items
+            filteredItems = transactionItems
                 .Where(product => string.IsNullOrEmpty(searchItem) ||
-                                   product.productName.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||
-                                   product.Brand.Contains(searchItem, StringComparison.OrdinalIgnoreCase))
+                                   product.Id.Contains(searchItem, StringComparison.OrdinalIgnoreCase))
                 .ToList();
             StateHasChanged();
         }
