@@ -49,7 +49,7 @@ namespace BeautyWeb.Pages
             newProduct = new InventoryItem();
         }
         private async void AddProductToDb()
-        {
+         {
             var validationErrors = ValidateProduct(newProduct);
             if (newProduct.Quantity == null)
             {
