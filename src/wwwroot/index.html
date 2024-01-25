@@ -67,11 +67,10 @@
         let dataArray = querySnapshot.docs.map((doc) => ({
             id: doc.id,
             brand: doc.get("brand"),
-            discount: doc.get("discount"),
+            sellingprice: doc.get("sellingprice"),
             quantity: doc.get("quantity"),
-            price: doc.get("price"),
+            netprice: doc.get("netprice"),
             productName: doc.get("product"),
-            type: doc.get("type"),
         }));
 
         return dataArray;
@@ -81,11 +80,10 @@
         try {
             const docRef = await addDoc(collection(db, "inventory"), {
                 brand: product.brand,
-                discount: product.discount,
-                quantity: product.quantity,
-                price: product.price,
-                product: product.productName,
-                type: product.type,
+                quantity: product.quantity || 0,
+                netprice: product.netprice || 9,
+                sellingprice: product.sellingprice || 9,
+                product: product.productName
             });
         } catch (e) {
             console.error("Error adding document: ", e);
@@ -106,11 +104,10 @@
             const docRef = doc(db, "inventory", product.id);
             await updateDoc(docRef, {
                 brand: product.brand,
-                discount: product.discount,
+                sellingprice: product.sellingprice,
                 quantity: product.quantity,
-                price: product.price,
-                product: product.productName,
-                type: product.type,
+                netprice: product.netprice,
+                product: product.productName
             });
             console.log("Document with ID", product.id, "updated successfully.");
         } catch (e) {

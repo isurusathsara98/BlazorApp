@@ -24,10 +24,9 @@ namespace BeautyWeb.Pages
                 Id = item.Id,
                 productName = item.productName,
                 Brand = item.Brand,
-                Type = item.Type,
                 Quantity = item.Quantity,
-                Price = item.Price,
-                Discount = item.Discount
+                netPrice = item.netPrice,
+                sellingPrice = item.sellingPrice
             };
             IsAddProduct = false;
             modalStyle = "display:block;";
@@ -57,14 +56,14 @@ namespace BeautyWeb.Pages
                 newProduct.Quantity = 0;
             }
 
-            if (newProduct.Price == null)
+            if (newProduct.netPrice == null)
             {
-                newProduct.Price = 0;
+                newProduct.netPrice = 0;
             }
 
-            if (newProduct.Discount == null)
+            if (newProduct.sellingPrice == null)
             {
-                newProduct.Discount = 0;
+                newProduct.sellingPrice = 0;
             }
             if (validationErrors.Count == 0)
             {
@@ -96,10 +95,6 @@ namespace BeautyWeb.Pages
                 validationErrors.Add("Brand is required.");
             }
 
-            if (string.IsNullOrWhiteSpace(product.Type))
-            {
-                validationErrors.Add("Type is required.");
-            }
             return validationErrors;
         }
         private async void UpdateInventoryItem()
@@ -110,14 +105,14 @@ namespace BeautyWeb.Pages
                 newProduct.Quantity = 0;
             }
 
-            if (newProduct.Price == null)
+            if (newProduct.netPrice == null)
             {
-                newProduct.Price = 0;
+                newProduct.netPrice = 0;
             }
 
-            if (newProduct.Discount == null)
+            if (newProduct.sellingPrice == null)
             {
-                newProduct.Discount = 0;
+                newProduct.sellingPrice = 0;
             }
             if (validationErrors.Count == 0)
             {
@@ -145,8 +140,7 @@ namespace BeautyWeb.Pages
             filteredItems = items
                 .Where(product => string.IsNullOrEmpty(searchItem) ||
                                    product.productName.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||
-                                   product.Brand.Contains(searchItem, StringComparison.OrdinalIgnoreCase) ||
-                                   product.Type.Contains(searchItem, StringComparison.OrdinalIgnoreCase))
+                                   product.Brand.Contains(searchItem, StringComparison.OrdinalIgnoreCase))
                 .ToList();
             StateHasChanged();
         }
