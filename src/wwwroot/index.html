@@ -80,9 +80,9 @@
         try {
             const docRef = await addDoc(collection(db, "inventory"), {
                 brand: product.brand,
-                quantity: product.quantity || 0,
-                netprice: product.netprice || 9,
-                sellingprice: product.sellingprice || 9,
+                quantity: product.quantity,
+                netprice: product.netPrice,
+                sellingprice: product.sellingPrice,
                 product: product.productName
             });
         } catch (e) {
@@ -104,9 +104,9 @@
             const docRef = doc(db, "inventory", product.id);
             await updateDoc(docRef, {
                 brand: product.brand,
-                sellingprice: product.sellingprice,
+                sellingprice: product.sellingPrice,
                 quantity: product.quantity,
-                netprice: product.netprice,
+                netprice: product.netPrice,
                 product: product.productName
             });
             console.log("Document with ID", product.id, "updated successfully.");
