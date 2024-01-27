@@ -405,3 +405,4 @@ input:checked + .box {
 
 input:checked + section.box .box-title:before {
     tr
+}
