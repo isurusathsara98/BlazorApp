@@ -18,7 +18,20 @@ namespace BeautyWeb.Pages
             items = await JS.InvokeAsync<List<InventoryItem>>("getInventory");
             transactionItems = await JS.InvokeAsync<List<TransactionItem>>("getTransaction");
         }
-
+        private string expandedForecastId = ""; // Empty string indicates no accordion is expanded
+        private bool IsSelected = false;
+        private void ToggleAccordion(string forecastId)
+        {
+            if (expandedForecastId == forecastId)
+            {
+                expandedForecastId = ""; // Collapse the accordion if it's already expanded
+            }
+            else
+            {
+                expandedForecastId = forecastId; // Expand the clicked accordion
+            }
+            StateHasChanged();
+        }
         private void EditProduct(InventoryItem item)
         {
             newProduct = new InventoryItem
