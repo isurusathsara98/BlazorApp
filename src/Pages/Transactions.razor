@@ -86,80 +86,81 @@
 
 <table class="table table-responsive-xl">
     <thead>
-    <tr>
-        <th>Transaction ID</th>
+        <tr>
+            <th>Transaction ID</th>
             <th>Total Amount</th>
             <th>Discount</th>
             <th>Status</th>
-        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-    </tr>
+        </tr>
     </thead>
     <tbody>
-    @foreach (var forecast in transactionItems)
-    {
-        
-        <tr>
-            <td colspan="5"> <!-- colspan="5" to span across all columns -->
-                <nav class="accordion arrows">
-                    <input type="radio" name="accordion" id="cb{@forecast.Id}" />
-                    <div class="box">
-                            <label class="box-title" for="cb{@forecast.Id}">
-                            <td>@forecast.Id</td>
-                            <td>@forecast.TotalAmount</td>
-                            <td>@forecast.Discount</td>
-
-                            @if (forecast.Status == 2)
-                            {
-                                <td class="status"><span class="pending">Pending</span></td>
-                                <td>&nbsp;</td>
-                            }
-                            @if (forecast.Status == 0)
-                            {
-                                <td class="status"><span class="completed">Competed</span></td>
-                                <td>
-                                    <button type="button" class="btn-close" aria-label="Close"></button>
-                                </td>
-                            }
-                            @if (forecast.Status == 1)
-                            {
-                                <td class="status"><span class="reverted">Reverted</span></td>
-                                <td>&nbsp;</td>
-                            }
-
-            
-                        </label>
-                        <label class="box-close" for="acc-close"></label>
-                        <div class="box-content">
-                            <table class="table table-responsive-xl">
-                                <thead>
+        @foreach (var forecast in transactionItems)
+        {
+            <tr @onclick="@(() => ToggleAccordion(forecast.Id))">
+                <td class="@(expandedForecastId == forecast.Id ? "bg-light-blue" : "")">@forecast.Id</td>
+                <td class="@(expandedForecastId == forecast.Id ? "bg-light-blue" : "")">@forecast.TotalAmount</td>
+                <td class="@(expandedForecastId == forecast.Id ? "bg-light-blue" : "")">@forecast.Discount</td>
+                <td class="@(expandedForecastId == forecast.Id ? "bg-light-blue" : "")">
+                    @if (forecast.Status == 2)
+                    {
+                        <span class="pending">Pending</span>
+                    }
+                    else if (forecast.Status == 0)
+                    {
+                        <span class="completed">Completed</span>
+                    }
+                    else if (forecast.Status == 1)
+                    {
+                        <span class="reverted">Reverted</span>
+                    }
+                </td>
+                <td class="@(expandedForecastId == forecast.Id ? "bg-light-blue" : "")">
+                    <button type="button" class="btn-toggle-accordion" @onclick="@(() => ToggleAccordion(forecast.Id))">
+                        @if (expandedForecastId == forecast.Id)
+                        {
+                            <span @onclick="@(() => ToggleAccordion(forecast.Id))">&times;</span> <!-- Cross symbol when accordion is open -->
+                        }
+                        else
+                        {
+                            <span @onclick="@(() => ToggleAccordion(forecast.Id))">&#x25BC;</span> <!-- Downward arrow when accordion is closed -->
+                        }
+                    </button>
+                </td>
+            </tr>
+            <tr style="@($"display: {(expandedForecastId == forecast.Id ? "table-row" : "none")}")">
+                <td colspan="5">
+                    <div style=" border: 2px solid #ccc;">
+                        <table class="table table-responsive-xl">
+                            <thead>
                                 <tr>
                                     <th>Product Name</th>
                                     <th>Brand</th>
                                     <th>Quantity</th>
                                     <th>Selling Price</th>
                                 </tr>
-                                </thead>
-                                <tbody>
-                                @foreach (var product in forecast.productItems)
-                                {   
-                                    <tr>
-                                        <td>@product.productName</td>
-                                        <td>@product.Brand</td>
-                                        <td>@product.Quantity</td>
-                                        <td>@product.sellingPrice</td>
-                                    </tr>
+                            </thead>
+                            <tbody>
+                                @if (expandedForecastId == forecast.Id)
+                                {
+                                    @foreach (var product in forecast.productItems)
+                                    {
+                                        <tr>
+                                            <td>@product.productName</td>
+                                            <td>@product.Brand</td>
+                                            <td>@product.Quantity</td>
+                                            <td>@product.sellingPrice</td>
+                                        </tr>
+                                    }
                                 }
-                                </tbody>
-                            </table>
-                        </div>
-                        <input type="radio" name="accordion" id="acc-close" />
+                            </tbody>
+                        </table>
                     </div>
-                </nav>
-            </td>
-        </tr>
-    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
 
 
 
